@@ -14,12 +14,30 @@ function [H, theta, rho] = hough_lines_acc(BW, varargin)
 
     %% Parse input arguments
     p = inputParser();
-    p = p.addParamValue('RhoResolution', 1);
-    p = p.addParamValue('Theta', linspace(-90, 89, 180));
-    p = p.parse(varargin{:});
+    p.addParamValue('RhoResolution', 1);
+    p.addParamValue('Theta', linspace(-90, 89, 180));
+    p.parse(varargin{:});
 
     rhoStep = p.Results.RhoResolution;
     theta = p.Results.Theta;
+    maxDistance = ceil(sqrt(sum(power(size(BW), 2))));
+    rho = -maxDistance:maxDistance;
+ 
+    H = zeros(size(rho,2),size(theta,2));
 
-    %% TODO: Your code here
+    [rows cols] = find(BW);
+    edgePixels = [rows cols];
+    
+    function d = distance(pixel, t)
+      d = pixel(1) * cos(t) + pixel(2) * sin(t);
+    endfunction
+    
+    function computeDistances(pixel)
+      for t = 1:size(theta,2)
+        r = floor(maxDistance + distance(pixel, theta(t)));
+        H(r, t) += 1;
+      end
+    endfunction
+    
+    arrayfun(@(n) computeDistances(edgePixels(n,:)), 1:size(edgePixels,1));
 endfunction
