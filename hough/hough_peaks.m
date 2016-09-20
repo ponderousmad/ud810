@@ -10,10 +10,10 @@ function peaks = hough_peaks(H, varargin)
 
     %% Parse input arguments
     p = inputParser;
-    p = p.addOptional('numpeaks', 1, @isnumeric);
-    p = p.addParamValue('Threshold', 0.5 * max(H(:)));
-    p = p.addParamValue('NHoodSize', floor(size(H) / 100.0) * 2 + 1);  % odd values >= size(H)/50
-    p = p.parse(varargin{:});
+    p.addOptional('numpeaks', 1, @isnumeric);
+    p.addParamValue('Threshold', 0.5 * max(H(:)));
+    p.addParamValue('NHoodSize', floor(size(H) / 100.0) * 2 + 1);  % odd values >= size(H)/50
+    p.parse(varargin{:});
 
     numpeaks = p.Results.numpeaks;
     threshold = p.Results.Threshold;
