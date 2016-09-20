@@ -3,8 +3,8 @@ pkg load image;  % Octave only
 
 %% 1-a
 img = imread(fullfile('input', 'ps1-input0.png'));  % already grayscale
-%% TODO: Compute edge image img_edges
-img_edges = edge(img, 'canny');
+[img_edges threshold] = edge(img, 'Canny', [], 1);
+display(threshold);
 imwrite(img_edges, fullfile('output', 'ps1-1-a-1.png'));  % save as output/ps1-1-a-1.png
 
 %% 2-a
