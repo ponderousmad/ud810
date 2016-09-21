@@ -29,14 +29,14 @@ function [H, theta, rho] = hough_lines_acc(BW, varargin)
     edgePixels = [rows cols];
     
     function d = distance(pixel, t)
-      d = pixel(1) * cos(t) + pixel(2) * sin(t);
+        d = pixel(1) * cos(t) + pixel(2) * sin(t);
     endfunction
     
     function computeDistances(pixel)
-      for t = 1:size(theta,2)
-        r = floor(maxDistance + distance(pixel, theta(t)));
-        H(r, t) += 1;
-      end
+        for t = 1:size(theta,2)
+            r = floor(maxDistance + distance(pixel, theta(t)));
+            H(r, t) += 1;
+        end
     endfunction
     
     arrayfun(@(n) computeDistances(edgePixels(n,:)), 1:size(edgePixels,1));
