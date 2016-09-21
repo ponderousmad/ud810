@@ -18,6 +18,36 @@ function peaks = hough_peaks(H, varargin)
     numpeaks = p.Results.numpeaks;
     threshold = p.Results.Threshold;
     nHoodSize = p.Results.NHoodSize;
-
-    % TODO: Your code here
+    
+    %% Find maximum values
+    [sortedH indices] = sort(H(:), 'descend');
+    
+    peaks = [];    
+    for i = indices'
+        value = H(i);
+        
+        % Filter by threshold
+        if value < threshold
+            break
+        end
+        
+        % Filter by neighborhood
+        [row column] =  ind2sub(size(H), i);
+        skip = false;
+        for j = 1:size(peaks,1)
+            if abs(row-peaks(j,1)) <= nHoodSize'
+                skip = true;
+                break
+            elseif abs(column-peaks(j,2)) <= nHoodSize
+                skip = true;
+                break
+            end
+        end
+        peaks = [peaks; [row column]];
+        
+        % Filter by numpeaks
+        if size(peaks,1) >= numpeaks
+            break
+        end
+    end
 endfunction
